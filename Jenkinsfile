@@ -1,5 +1,3 @@
-
-
 pipeline {
     agent any  // Use any available agent
 
@@ -31,7 +29,7 @@ pipeline {
         stage('Run Application') {
             steps {
                 // Start the JAR application
-                sh 'mvn exec:java -Dexec.mainClass=com.example.App'
+                sh 'java -jar target/MyMavenSeleniumApp01-1.0-SNAPSHOT.jar'
             }
         }
 
