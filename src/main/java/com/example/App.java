@@ -1,53 +1,34 @@
+package com.example;
+
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
-import org.openqa.selenium.chrome.ChromeOptions;
-import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.openqa.selenium.support.ui.WebDriverWait;
 
-import io.github.bonigarcia.wdm.WebDriverManager;
-
-import java.time.Duration;
-
-public class App {
-    public static void main(String[] args) {
-        // Automatically download and configure ChromeDriver
-        WebDriverManager.chromedriver().setup();
-
-        // Configure Chrome for headless execution (suitable for Jenkins/Linux)
-        ChromeOptions options = new ChromeOptions();
-        options.addArguments("--headless=new");
-        options.addArguments("--no-sandbox");
-        options.addArguments("--disable-dev-shm-usage");
-        options.addArguments("--disable-gpu");
-        options.addArguments("--window-size=1920,1080");
-
-        // Initialize WebDriver
-        WebDriver driver = new ChromeDriver(options);
+public class App 
+{
+    public static void main(String[] args)
+    {
+        WebDriver driver = new ChromeDriver();
 
         try {
-            driver.get("https://www.saucedemo.com/");
+            driver.get("https://practicetestautomation.com/practice-test-login/");
+            driver.manage().window().maximize();
 
-            // Explicit wait for better synchronization
-            WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+            Thread.sleep(2000); // wait 2 seconds after page load
 
-            wait.until(ExpectedConditions.visibilityOfElementLocated(By.id("user-name")))
-                    .sendKeys("standard_user");
+            driver.findElement(By.id("username")).sendKeys("student");
+            driver.findElement(By.id("password")).sendKeys("Password123");
 
-            driver.findElement(By.id("password"))
-                    .sendKeys("secret_sauce");
+            Thread.sleep(2000); // wait before clicking login
 
-            driver.findElement(By.id("login-button")).click();
+            driver.findElement(By.id("submit")).click();
 
-            // Verify successful login
-            wait.until(ExpectedConditions.visibilityOfElementLocated(By.className("inventory_list")));
+            Thread.sleep(2000); // wait after login
 
-            System.out.println("Login successful!");
-            System.out.println("Page Title: " + driver.getTitle());
-
+        } catch (InterruptedException e) {
+            e.printStackTrace();
         } finally {
-            // Close the browser
-            driver.quit();
+            driver.quit(); // closes browser
         }
     }
 }
