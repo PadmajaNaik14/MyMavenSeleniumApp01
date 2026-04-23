@@ -3,32 +3,34 @@ package com.example;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.chrome.ChromeOptions;
 
-public class App 
-{
-    public static void main(String[] args)
-    {
-        WebDriver driver = new ChromeDriver();
+/**
+ * Hello world!
+ */
+public class App {
+    public static void main(String[] args) {
+
+        // Configure Chrome for headless execution
+        ChromeOptions options = new ChromeOptions();
+        options.addArguments("--headless=new");       // modern headless mode
+        options.addArguments("--no-sandbox");         // required in Jenkins/Linux
+        options.addArguments("--disable-dev-shm-usage"); // prevents crashes
+        options.addArguments("--disable-gpu");
+        options.addArguments("--window-size=1920,1080"); // optional but useful
+
+        WebDriver driver = new ChromeDriver(options);
 
         try {
             driver.get("https://www.saucedemo.com/");
-            driver.manage().window().maximize();
-
-            Thread.sleep(2000); // wait 2 seconds after page load
 
             driver.findElement(By.id("user-name")).sendKeys("standard_user");
             driver.findElement(By.id("password")).sendKeys("secret_sauce");
-
-            Thread.sleep(2000); // wait before clicking login
-
             driver.findElement(By.id("login-button")).click();
 
-            Thread.sleep(2000); // wait after login
-
-        } catch (InterruptedException e) {
-            e.printStackTrace();
+            System.out.println("Page Title: " + driver.getTitle());
         } finally {
-            driver.quit(); // closes browser
+            driver.quit(); // always close browser
         }
     }
 }
